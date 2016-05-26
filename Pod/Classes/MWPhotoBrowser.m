@@ -91,6 +91,8 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     _didSavePreviousStateOfNavBar = NO;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    NSLog(@"Super lol");
+    
         delete_item = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStylePlain target:self action:@selector(DeleteImage)];
     
     
