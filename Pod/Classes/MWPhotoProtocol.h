@@ -65,6 +65,11 @@
 // Return nil to display no caption
 - (NSString *)caption;
 
+- (NSString *)owner;
+- (NSString *)poster;
+- (NSString *)current_owner_id;
+- (NSString *)photo_id;
+
 // Cancel any background loading of image data
 - (void)cancelAnyLoading;
 
