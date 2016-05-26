@@ -18,6 +18,7 @@
 	// Data
     NSUInteger _photoCount;
     NSMutableArray *_photos;
+    NSDictionary *_previousNavBarTitlesAttributes;
     NSMutableArray *_thumbPhotos;
 	NSArray *_fixedPhotosArray; // Provided via init
 	
