@@ -17,7 +17,15 @@
 
 static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 
-@implementation MWPhotoBrowser
+@implementation MWPhotoBrowser {
+    
+    // ADDED
+    
+    UIBarButtonItem *delete_item;
+    
+    // ADDED
+    
+}
 
 #pragma mark - Init
 
@@ -83,6 +91,9 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     _didSavePreviousStateOfNavBar = NO;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+        delete_item = [[UIBarButtonItem alloc] initWithTitle:@"Delete" style:UIBarButtonItemStylePlain target:self action:@selector(DeleteImage)];
+    
+    
     // Listen for MWPhoto notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleMWPhotoLoadingDidEndNotification:)
@@ -90,6 +101,43 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
                                                object:nil];
     
 }
+
+
+- (void) DeleteImage {
+    
+    [self askForDelete];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == [alertView cancelButtonIndex]) {
+        
+        NSLog(@"The cancel button was clicked from alertView");
+        
+    } else {
+        
+        MWPhoto *photo = [_photos objectAtIndex:_currentPageIndex];
+        
+        if ([_delegate respondsToSelector:@selector(deleteMyPhoto:index:)]) {
+            [_delegate deleteMyPhoto:photo.photo_id index:_currentPageIndex];
+        }
+        
+    }
+}
+
+- (void) askForDelete {
+    
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Delete"
+                                                      message:@"Do you really want to delete this photo ?"
+                                                     delegate:self
+                                            cancelButtonTitle:@"No"
+                                            otherButtonTitles:@"Yes", nil];
+    
+    [message show];
+    
+}
+
 
 - (void)dealloc {
     [self clearCurrentVideo];
@@ -1108,6 +1156,26 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	// Buttons
 	_previousButton.enabled = (_currentPageIndex > 0);
 	_nextButton.enabled = (_currentPageIndex < numberOfPhotos - 1);
+    
+        if (!_gridController && numberOfPhotos > 0) {
+        
+        MWPhoto *photo = [_photos objectAtIndex:_currentPageIndex];
+        
+        if (photo != nil && ![photo isEqual:[NSNull null]]) {
+            
+            if ((![photo.owner isEqualToString:photo.poster] && ([photo.poster isEqualToString:photo.current_owner_id] || [photo.owner isEqualToString:photo.current_owner_id])) || ([photo.owner isEqualToString:photo.current_owner_id] && [_photos count] > 1)) {
+                
+                self.navigationItem.rightBarButtonItem = delete_item;
+                
+            } else {
+                
+                self.navigationItem.rightBarButtonItem = nil;
+                
+            }
+            
+        }
+        
+    }
     
     // Disable action button if there is no image or it's a video
     MWPhoto *photo = [self photoAtIndex:_currentPageIndex];
