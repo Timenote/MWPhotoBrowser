@@ -21,6 +21,11 @@
 @property (nonatomic) BOOL emptyImage;
 @property (nonatomic) BOOL isVideo;
 
+@property (nonatomic, strong) NSString *owner;
+@property (nonatomic, strong) NSString *poster;
+@property (nonatomic, strong) NSString *current_owner_id;
+@property (nonatomic, strong) NSString *photo_id;
+
 + (MWPhoto *)photoWithImage:(UIImage *)image;
 + (MWPhoto *)photoWithURL:(NSURL *)url;
 + (MWPhoto *)photoWithAsset:(PHAsset *)asset targetSize:(CGSize)targetSize;
